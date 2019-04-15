@@ -20,7 +20,7 @@ public class TablePrinter {
             for (int j = 0; j < maxLength; j++) {
                 dividingString += "-";
             }
-            if (i != (tableSize - 1)) {
+            if (i != tableSize - 1) {
                 dividingString += "+";
             }
         }
@@ -32,7 +32,7 @@ public class TablePrinter {
 
             for (int j = 0; j < tableSize; j++) {
                 mulString += String.format(formattedString, tableArray[i][j]);
-                if (j != (tableSize - 1)) {
+                if (j != tableSize - 1) {
                     mulString += "|";
                 }
             }
