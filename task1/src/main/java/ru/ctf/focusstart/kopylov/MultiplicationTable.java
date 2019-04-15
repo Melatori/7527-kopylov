@@ -4,11 +4,13 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MultiplicationTable {
+
+    private static final int MIN_REQUIRED_SIZE = 1;
+    private static final int MAX_CORRECT_SIZE = 32;
+
     public static void main(String[] args) {
 
         boolean correctSize = false;
-        final int MIN_REQUIRED_SIZE = 1;
-        final int MAX_CORRECT_SIZE = 32;
         int size = 0;
 
         try {
