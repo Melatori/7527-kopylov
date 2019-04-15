@@ -1,12 +1,8 @@
 package ru.ctf.focusstart.kopylov;
 
-//зачем-то предлагает уменьшить уровень доступа public, зачем?
 public class MathArrayBuilder {
 
-    public MathArrayBuilder() {
-    }
-
-    public int[][] BuildMulArray(int size) {
+    public int[][] buildMulArray(int size) {
         int[][] array = new int[size][size];
 
         for (int i = 0; i < size; i++) {

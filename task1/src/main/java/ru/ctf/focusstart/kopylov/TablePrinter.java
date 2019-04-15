@@ -8,9 +8,9 @@ public class TablePrinter {
         tableArray = array;
     }
 
-    public void BuildMulTable() {
+    public void buildMulTable() {
 
-        int tableSize = tableArray[0].length;
+        int tableSize = tableArray.length;
 
         int maxLength = String.valueOf(tableArray[tableSize - 1][tableSize - 1]).length();
 
