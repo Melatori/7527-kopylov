@@ -1,43 +1,45 @@
+import java.io.IOException;
+
 public class Rectangle extends Figure {
     private double diagonal;
     private double length;
     private double width;
 
-    public Rectangle(double sideOne, double sideTwo) throws Exception {
+    public Rectangle(double sideOne, double sideTwo) throws IOException {
         if ((sideOne <= 0) || (sideTwo <= 0)) {
-            throw new Exception("Неправильно указанны стороны прямоугольника, невозможный прямоугольник");
+            throw new IOException("Неправильно указанны стороны прямоугольника, невозможный прямоугольник");
         }
         this.name = "Прямоугольник";
-        if (sideOne > sideOne) {
-            length = sideOne;
-            width = sideTwo;
+        if (sideOne > sideTwo) {
+            this.length = sideOne;
+            this.width = sideTwo;
         } else {
-            length = sideTwo;
-            width = sideOne;
+            this.length = sideTwo;
+            this.width = sideOne;
         }
-        setArea();
-        setPerimeter();
-        setDiagonal();
+        this.perimeter = calcPerimeter(this.length, this.width);
+        this.area = calcArea(this.length, this.width);
+        this.diagonal = calcDiagonal(this.length, this.width);
         setParams();
     }
 
-    private void setArea() {
-        this.area = this.length * this.width;
+    private static double calcArea(double length, double width) {
+        return length * width;
     }
 
-    private void setPerimeter() {
-        this.perimeter = this.length * 2 + this.width * 2;
+    private static double calcPerimeter(double length, double width) {
+        return length * 2 + width * 2;
     }
 
-    private void setDiagonal() {
-        this.diagonal = Math.sqrt(Math.pow(this.length, 2) + Math.pow(this.width, 2));
+    private static double calcDiagonal(double length, double width) {
+        return Math.sqrt(Math.pow(length, 2) + Math.pow(width, 2));
     }
 
     @Override
     protected void setParams() {
         super.setParams();
-        params.add(String.format("Длина диагонали: %.2f", this.diagonal));
-        params.add(String.format("Длина: %.2f", this.length));
-        params.add(String.format("Ширина: %.2f", this.width));
+        params.add(String.format("Длина диагонали: %.2f", diagonal));
+        params.add(String.format("Длина: %.2f", length));
+        params.add(String.format("Ширина: %.2f", width));
     }
 }

@@ -11,47 +11,45 @@ public class Main {
     public static void main(String[] args) {
 
         if (args.length <= 0) {
-            System.out.println("неправильно указанны параметры");
-        } else {
-            try {
-                String[] fileData = readFile(args[0]);
-                String[] params;
-
-                switch (FigureType.valueOf(fileData[0])) {
-                    case CIRCLE:
-                        Circle circle = new Circle(Double.valueOf(fileData[1]));
-                        if (args.length == 1) {
-                            getData(circle);
-                        } else {
-                            getData(circle, args[1]);
-                        }
-                        break;
-                    case TRIANGLE:
-                        params = fileData[1].split(" ");
-                        Triangle triangle = new Triangle(Double.valueOf(params[0]), Double.valueOf(params[1]), Double.valueOf(params[2]));
-                        if (args.length == 1) {
-                            getData(triangle);
-                        } else {
-                            getData(triangle, args[1]);
-                        }
-                        break;
-                    case RECTANGLE:
-                        params = fileData[1].split(" ");
-                        Rectangle rectangle = new Rectangle(Double.valueOf(params[0]), Double.valueOf(params[1]));
-                        if (args.length == 1) {
-                            getData(rectangle);
-                        } else {
-                            getData(rectangle, args[1]);
-                        }
-                        break;
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            System.out.println("Неправильно указанны параметры");
+            return;
+        }
+        try {
+            String[] fileData = readFile(args[0]);
+            if (fileData == null) {
+                return;
             }
+            String[] params;
+
+            switch (FigureType.valueOf(fileData[0])) {
+                case CIRCLE:
+                    Circle circle = new Circle(Double.valueOf(fileData[1]));
+                    chooserPrintType(circle, args);
+                    break;
+                case TRIANGLE:
+                    params = fileData[1].split(" ");
+                    Triangle triangle = new Triangle(Double.valueOf(params[0]), Double.valueOf(params[1]), Double.valueOf(params[2]));
+                    chooserPrintType(triangle, args);
+                    break;
+                case RECTANGLE:
+                    params = fileData[1].split(" ");
+                    Rectangle rectangle = new Rectangle(Double.valueOf(params[0]), Double.valueOf(params[1]));
+                    chooserPrintType(rectangle, args);
+                    break;
+                default:
+                    System.err.println("Ошибка, нет возможности опознать фигуру");
+                    break;
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Некорректно введены параметры фигуры");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Введено недостаточно параметров фигуры");
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
     }
 
-    private static String[] readFile(String fileName) throws IOException {
+    private static String[] readFile(String fileName) {
         String[] data = new String[2];
 
         try (FileInputStream inputStream = new FileInputStream(fileName)) {
@@ -61,55 +59,35 @@ public class Main {
             data[1] = reader.readLine();
 
         } catch (FileNotFoundException e) {
-            System.out.println("Файл не найден");
+            System.err.println("Ошибка, файл не найден");
+            return null;
         } catch (SecurityException e) {
-            System.out.println("Нет доступа к файлу");
+            System.err.println("Ошибка, файл не доступен");
+            return null;
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении строки");
+            return null;
         }
-
         return data;
     }
 
-    private static void getData(Circle data) {
+    private static void chooserPrintType(Figure figure, String[] args) {
+        if (args.length == 1) {
+            printData(figure);
+        } else {
+            printData(figure, args[1]);
+        }
+    }
+
+    private static void printData(Figure data) {
         for (String param : data.getParams()) {
             System.out.println(param);
         }
     }
 
-    private static void getData(Circle data, String out) {
+    private static void printData(Figure data, String out) {
         try (FileWriter fileWriter = new FileWriter(out)) {
-            for (String param : data.getParams()){
-                fileWriter.write(param + "\n");
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void getData(Rectangle data) {
-        for (String param : data.getParams()) {
-            System.out.println(param);
-        }
-    }
-
-    private static void getData(Rectangle data, String out) {
-        try (FileWriter fileWriter = new FileWriter(out)) {
-            for (String param : data.getParams()){
-                fileWriter.write(param + "\n");
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void getData(Triangle data) {
-        for (String param : data.getParams()) {
-            System.out.println(param);
-        }
-    }
-
-    private static void getData(Triangle data, String out) {
-        try (FileWriter fileWriter = new FileWriter(out)) {
-            for (String param : data.getParams()){
+            for (String param : data.getParams()) {
                 fileWriter.write(param + "\n");
             }
         } catch (Exception e) {

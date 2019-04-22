@@ -9,8 +9,8 @@ class Figure {
 
     protected void setParams() {
         params.add("Тип фигуры: " + name);
-        params.add(String.format("Площадь: %.2f", this.area));
-        params.add(String.format("Периметр: %.2f", this.perimeter));
+        params.add(String.format("Площадь: %.2f", area));
+        params.add(String.format("Периметр: %.2f", perimeter));
     }
 
     public List<String> getParams() {
