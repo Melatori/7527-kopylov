@@ -90,8 +90,8 @@ public class Main {
             for (String param : data.getParams()) {
                 fileWriter.write(param + "\n");
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Ошибка записи в файл");
         }
     }
 }
