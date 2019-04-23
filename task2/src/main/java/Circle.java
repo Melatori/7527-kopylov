@@ -1,12 +1,10 @@
-import java.io.IOException;
-
 public class Circle extends Figure {
     private double radius;
     private double diameter;
 
-    public Circle(double radius) throws IOException{
+    public Circle(double radius) throws IllegalArgumentException {
         if (radius <= 0) {
-            throw new IOException("Неправильно указан радиус круга, невозможный круг");
+            throw new IllegalArgumentException("Неправильно указан радиус круга, невозможный круг");
         }
         this.radius = radius;
         this.name = "Круг";

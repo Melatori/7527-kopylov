@@ -1,13 +1,11 @@
-import java.io.IOException;
-
 public class Rectangle extends Figure {
     private double diagonal;
     private double length;
     private double width;
 
-    public Rectangle(double sideOne, double sideTwo) throws IOException {
+    public Rectangle(double sideOne, double sideTwo) throws IllegalArgumentException {
         if ((sideOne <= 0) || (sideTwo <= 0)) {
-            throw new IOException("Неправильно указанны стороны прямоугольника, невозможный прямоугольник");
+            throw new IllegalArgumentException("Неправильно указанны стороны прямоугольника, невозможный прямоугольник");
         }
         this.name = "Прямоугольник";
         if (sideOne > sideTwo) {

@@ -24,17 +24,17 @@ public class Main {
             switch (FigureType.valueOf(fileData[0])) {
                 case CIRCLE:
                     Circle circle = new Circle(Double.valueOf(fileData[1]));
-                    chooserPrintType(circle, args);
+                    printData(circle, args);
                     break;
                 case TRIANGLE:
                     params = fileData[1].split(" ");
                     Triangle triangle = new Triangle(Double.valueOf(params[0]), Double.valueOf(params[1]), Double.valueOf(params[2]));
-                    chooserPrintType(triangle, args);
+                    printData(triangle, args);
                     break;
                 case RECTANGLE:
                     params = fileData[1].split(" ");
                     Rectangle rectangle = new Rectangle(Double.valueOf(params[0]), Double.valueOf(params[1]));
-                    chooserPrintType(rectangle, args);
+                    printData(rectangle, args);
                     break;
                 default:
                     System.err.println("Ошибка, нет возможности опознать фигуру");
@@ -44,8 +44,8 @@ public class Main {
             System.err.println("Некорректно введены параметры фигуры");
         } catch (ArrayIndexOutOfBoundsException e) {
             System.err.println("Введено недостаточно параметров фигуры");
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println("Ошибка инициализации фигуры: " + e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class Main {
         return data;
     }
 
-    private static void chooserPrintType(Figure figure, String[] args) {
+    private static void printData(Figure figure, String[] args) {
         if (args.length == 1) {
             printData(figure);
         } else {

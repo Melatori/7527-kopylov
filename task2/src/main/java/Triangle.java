@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 public class Triangle extends Figure {
     private double sideOne;
     private double angleOne;
@@ -8,10 +6,10 @@ public class Triangle extends Figure {
     private double sideThree;
     private double angleThree;
 
-    public Triangle(double sideOne, double sideTwo, double sideThree) throws IOException {
+    public Triangle(double sideOne, double sideTwo, double sideThree) throws IllegalArgumentException {
         if ((sideOne <= 0) || (sideTwo <= 0) || (sideThree <= 0) ||
-                (sideOne + sideTwo < sideThree) || (sideTwo + sideThree < sideOne) || (sideOne + sideThree < sideOne)) {
-            throw new IOException("Неправильно указанны стороны треугольника, невозможный треугольник");
+                (sideOne + sideTwo <= sideThree) || (sideTwo + sideThree <= sideOne) || (sideOne + sideThree <= sideOne)) {
+            throw new IllegalArgumentException("Неправильно указанны стороны треугольника, невозможный треугольник");
         }
         this.name = "Треугольник";
         this.sideOne = sideOne;
