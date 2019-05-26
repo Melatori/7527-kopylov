@@ -26,7 +26,7 @@ public class UIMainWindow {
         mainFrame.add(header.getHead(), BorderLayout.NORTH);
 
         UIGameField gameField = new UIGameField();
-        Game.addListener(gameField);
+        Game.addGameListener(gameField);
         Game.newGame();
         mainFrame.add(gameField.getField(), BorderLayout.CENTER);
 
