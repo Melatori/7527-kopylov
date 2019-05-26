@@ -3,17 +3,19 @@ package ru.ctf.focusstart.kopylov.UIComponents;
 import java.awt.*;
 
 public class Palette {
-    private static Color headerBackgroundColor = new Color(0, 150, 136);
-    private static Color textColor = new Color(255, 255, 255);
-    private static Color darkTextColor = new Color(33, 33, 33);
-    private static Color inputBackgroundColor = new Color(189, 189, 189);
-    private static Color inputBorderColor = new Color(33, 33, 33);
-    private static Color buttonBackgroundColor = new Color(189, 189, 189);
-    private static Color headColor = new Color(0, 121, 107);
-    private static Color backgroundColor = new Color(178, 223, 219);
-    private static Color openedCellColor = new Color(117, 117, 117);
-    private static Color cellBorderColor = new Color(0, 121, 107);
-    private static Color explodedCellColor = new Color(0, 121, 107);
+    private static final Color headerBackgroundColor = new Color(0, 150, 136);
+    private static final Color textColor = new Color(255, 255, 255);
+    private static final Color darkTextColor = new Color(33, 33, 33);
+    private static final Color inputBackgroundColor = new Color(189, 189, 189);
+    private static final Color inputBorderColor = new Color(33, 33, 33);
+    private static final Color buttonBackgroundColor = new Color(189, 189, 189);
+    private static final Color headColor = new Color(0, 121, 107);
+    private static final Color backgroundColor = new Color(178, 223, 219);
+    private static final Color openedCellColor = new Color(117, 117, 117);
+    private static final Color cellBorderColor = new Color(0, 121, 107);
+    private static final Color explodedCellColor = new Color(0, 121, 107);
+    private static final Color loseButtonColor = new Color(244, 67, 54);
+    private static final Color winButtonColor = new Color(76, 175, 80);
 
     private Palette() {
 
@@ -61,5 +63,13 @@ public class Palette {
 
     public static Color getButtonBackgroundColor() {
         return buttonBackgroundColor;
+    }
+
+    public static Color getLoseButtonColor() {
+        return loseButtonColor;
+    }
+
+    public static Color getWinButtonColor() {
+        return winButtonColor;
     }
 }

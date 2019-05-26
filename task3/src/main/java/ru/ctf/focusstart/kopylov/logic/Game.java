@@ -9,19 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    private static List<GameListener> listenerList = new ArrayList<>();
+    private static List<GameListener> gameListeners = new ArrayList<>();
+    private static List<GameStateListener> gameStateListeners = new ArrayList<>();
     private static int bombMarked;
     private static int emptyCellsMarked;
     private static Stopwatch stopwatch = new Stopwatch();
 
-    public static void addListener(GameListener listener) {
-        listenerList.add(listener);
+    public static void addGameListener(GameListener listener) {
+        gameListeners.add(listener);
+    }
+
+    public static void addGameStateListener(GameStateListener listener) {
+        gameStateListeners.add(listener);
     }
 
     public static void newGame() {
         bombMarked = 0;
         emptyCellsMarked = 0;
-        for (GameListener field : listenerList) {
+        for (GameListener field : gameListeners) {
             field.createNewGame();
         }
     }
@@ -29,7 +34,7 @@ public class Game {
     public static void restartGame() {
         bombMarked = 0;
         emptyCellsMarked = 0;
-        for (GameListener field : listenerList) {
+        for (GameListener field : gameListeners) {
             field.createNewGame();
         }
         UIMainWindow.refreshGameField();
@@ -112,13 +117,17 @@ public class Game {
         openField();
         stopwatch.stop();
         Scoreboard.addToBoard(Score.getScore());
-        System.out.println("Victory!!!");
+        for (GameStateListener listener : gameStateListeners) {
+            listener.onWinGame();
+        }
     }
 
     private static void lose() {
         openField();
         stopwatch.stop();
-        System.out.println("Lose");
+        for (GameStateListener listener : gameStateListeners) {
+            listener.onLoseGame();
+        }
     }
 
     private static void openField() {
