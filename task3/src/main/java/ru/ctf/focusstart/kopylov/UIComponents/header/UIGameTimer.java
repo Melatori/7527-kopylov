@@ -11,8 +11,8 @@ public class UIGameTimer implements StopwatchListener {
 
     UIGameTimer() {
         timer.setOpaque(true);
-        timer.setBackground(Palette.getHeaderBackgroundColor());
-        timer.setForeground(Palette.getTextColor());
+        timer.setBackground(Palette.HEADER_BACKGROUND_COLOR);
+        timer.setForeground(Palette.TEXT_COLOR);
         timer.setPreferredSize(new Dimension(60,30));
 
         timer.setText(String.format("%03d : %02d", 0, 0));

@@ -1,30 +1,30 @@
 package ru.ctf.focusstart.kopylov.UIComponents.header;
 
 import ru.ctf.focusstart.kopylov.UIComponents.Palette;
-import ru.ctf.focusstart.kopylov.logic.Game;
-import ru.ctf.focusstart.kopylov.logic.GameListener;
-import ru.ctf.focusstart.kopylov.logic.GameStateListener;
+import ru.ctf.focusstart.kopylov.logic.field.FieldListener;
+import ru.ctf.focusstart.kopylov.logic.game.GameManager;
+import ru.ctf.focusstart.kopylov.logic.game.GameStateListener;
 
 import javax.swing.*;
 import java.awt.*;
 
-class UINewGameButton implements GameStateListener, GameListener {
+class UINewGameButton implements GameStateListener, FieldListener {
     private JButton button = new JButton();
 
-    UINewGameButton() {
+    UINewGameButton(GameManager gameManager) {
         button.setOpaque(true);
-        button.setBackground(Palette.getHeaderBackgroundColor());
-        button.setForeground(Palette.getTextColor());
+        button.setBackground(Palette.HEADER_BACKGROUND_COLOR);
+        button.setForeground(Palette.TEXT_COLOR);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
 
         button.setText("New game");
         button.setSize(80, 40);
         button.setPreferredSize(new Dimension(80, 30));
-        button.addActionListener((e) -> Game.restartGame());
+        button.addActionListener((e) -> gameManager.restartGame());
 
-        Game.addGameStateListener(this);
-        Game.addGameListener(this);
+        gameManager.addGameStateListener(this);
+        gameManager.getField().addListener(this);
     }
 
     JButton getButton() {
@@ -32,17 +32,17 @@ class UINewGameButton implements GameStateListener, GameListener {
     }
 
     @Override
-    public void onWinGame() {
-        button.setBackground(Palette.getWinButtonColor());
+    public void handleWinGame() {
+        button.setBackground(Palette.WIN_BUTTON_COLOR);
     }
 
     @Override
-    public void onLoseGame() {
-        button.setBackground(Palette.getLoseButtonColor());
+    public void handleLoseGame() {
+        button.setBackground(Palette.LOSE_BUTTON_COLOR);
     }
 
     @Override
     public void createNewGame() {
-        button.setBackground(Palette.getHeaderBackgroundColor());
+        button.setBackground(Palette.HEADER_BACKGROUND_COLOR);
     }
 }

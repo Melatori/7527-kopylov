@@ -1,9 +1,9 @@
 package ru.ctf.focusstart.kopylov.UIComponents.field;
 
 import ru.ctf.focusstart.kopylov.UIComponents.Palette;
-import ru.ctf.focusstart.kopylov.logic.FieldBuilder;
-import ru.ctf.focusstart.kopylov.logic.Game;
-import ru.ctf.focusstart.kopylov.logic.GameListener;
+import ru.ctf.focusstart.kopylov.logic.field.Field;
+import ru.ctf.focusstart.kopylov.logic.field.FieldListener;
+import ru.ctf.focusstart.kopylov.logic.game.GameManager;
 import ru.ctf.focusstart.kopylov.logic.cells.Cell;
 
 import javax.swing.*;
@@ -11,13 +11,17 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class UIGameField implements GameListener {
+public class UIGameField implements FieldListener {
     private JPanel fieldPanel;
+    private Field fieldModel;
 
-    public UIGameField() {
+    public UIGameField(GameManager gameManager) {
         fieldPanel = new JPanel();
         fieldPanel.setOpaque(true);
-        fieldPanel.setBackground(Palette.getBackgroundColor());
+        fieldPanel.setBackground(Palette.BACKGROUND_COLOR);
+
+        fieldModel = gameManager.getField();
+        fieldModel.addListener(this);
 
         UICell[][] uiCells = buildField();
         initializeField(uiCells);
@@ -30,13 +34,13 @@ public class UIGameField implements GameListener {
     }
 
     private UICell[][] buildField() {
-        Cell[][] clawCells = FieldBuilder.buildField();
-        UICell[][] field = new UICell[FieldBuilder.getHeight()][FieldBuilder.getWidth()];
+        Cell[][] cells = fieldModel.getCells();
+        UICell[][] field = new UICell[fieldModel.getHeight()][fieldModel.getWidth()];
 
-        for (int i = 0; i < FieldBuilder.getHeight(); i++) {
-            for (int j = 0; j < FieldBuilder.getWidth(); j++) {
+        for (int i = 0; i < fieldModel.getHeight(); i++) {
+            for (int j = 0; j < fieldModel.getWidth(); j++) {
                 field[i][j] = new UICell();
-                clawCells[i][j].addListener(field[i][j]);
+                cells[i][j].addListener(field[i][j]);
             }
         }
 
@@ -53,8 +57,8 @@ public class UIGameField implements GameListener {
             }
         }
 
-        fieldPanel.setLayout(new GridLayout(FieldBuilder.getHeight(), FieldBuilder.getWidth()));
-        fieldPanel.setSize(new Dimension(FieldBuilder.getWidth() * 20, FieldBuilder.getHeight() * 20));
+        fieldPanel.setLayout(new GridLayout(fieldModel.getHeight(), fieldModel.getWidth()));
+        fieldPanel.setSize(new Dimension(fieldModel.getWidth() * 20, fieldModel.getHeight() * 20));
     }
 
     private void attachEvent(int x, int y, UICell cell) {
@@ -67,9 +71,9 @@ public class UIGameField implements GameListener {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    Game.reactOnOpenCell(x, y);
+                    fieldModel.openCell(x, y);
                 } else if (e.getButton() == MouseEvent.BUTTON3) {
-                    Game.reactOnMarkCell(x, y);
+                    fieldModel.markCell(x, y);
                 }
             }
 

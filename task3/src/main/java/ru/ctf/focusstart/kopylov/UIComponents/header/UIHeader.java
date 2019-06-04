@@ -1,8 +1,7 @@
 package ru.ctf.focusstart.kopylov.UIComponents.header;
 
 import ru.ctf.focusstart.kopylov.UIComponents.Palette;
-import ru.ctf.focusstart.kopylov.logic.Game;
-import ru.ctf.focusstart.kopylov.logic.score.Score;
+import ru.ctf.focusstart.kopylov.logic.game.GameManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,16 +9,16 @@ import java.awt.*;
 public class UIHeader {
     private JPanel head = new JPanel();
 
-    public UIHeader() {
+    public UIHeader(GameManager gameManager) {
         UIGameTimer timer = new UIGameTimer();
         UIScore score = new UIScore();
-        UINewGameButton newGame = new UINewGameButton();
+        UINewGameButton newGame = new UINewGameButton(gameManager);
 
-        Game.getStopwatch().addListeners(timer);
-        Score.addListeners(score);
+        gameManager.STOPWATCH.addListeners(timer);
+        gameManager.getScore().addListeners(score);
 
-        head.setBackground(Palette.getHeadColor());
-        head.setBorder(BorderFactory.createLineBorder(Palette.getHeaderBackgroundColor(), 5));
+        head.setBackground(Palette.HEADER_COLOR);
+        head.setBorder(BorderFactory.createLineBorder(Palette.HEADER_BACKGROUND_COLOR, 5));
         head.setPreferredSize(new Dimension(20,40));
 
         head.setLayout(new GridLayout(1,3));

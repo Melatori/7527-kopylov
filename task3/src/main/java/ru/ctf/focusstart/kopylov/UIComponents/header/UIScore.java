@@ -11,8 +11,8 @@ class UIScore implements ScoreListener {
 
     UIScore() {
         score.setOpaque(true);
-        score.setBackground(Palette.getHeaderBackgroundColor());
-        score.setForeground(Palette.getTextColor());
+        score.setBackground(Palette.HEADER_BACKGROUND_COLOR);
+        score.setForeground(Palette.TEXT_COLOR);
         score.setPreferredSize(new Dimension(40,30));
 
         score.setText(String.format("%3d", 0));

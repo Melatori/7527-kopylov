@@ -23,14 +23,14 @@ public class UICell implements CellListener {
         button.setOpaque(true);
         if (number == -1) {
             button.setIcon(BOMB_ICON);
-            button.setBackground(Palette.getExplodedCellColor());
-            button.setBorder(new BorderUIResource.LineBorderUIResource(Palette.getExplodedCellColor()));
+            button.setBackground(Palette.EXPLODED_CELL_COLOR);
+            button.setBorder(new BorderUIResource.LineBorderUIResource(Palette.EXPLODED_CELL_COLOR));
             return;
         } else if (number < 9 && number > 0) {
             button.setText(String.valueOf(number));
         }
-        button.setBackground(Palette.getOpenedCellColor());
-        button.setBorder(new BorderUIResource.LineBorderUIResource(Palette.getCellBorderColor()));
+        button.setBackground(Palette.OPENED_CELL_COLOR);
+        button.setBorder(new BorderUIResource.LineBorderUIResource(Palette.CELL_BORDER_COLOR));
     }
 
     public void mark() {

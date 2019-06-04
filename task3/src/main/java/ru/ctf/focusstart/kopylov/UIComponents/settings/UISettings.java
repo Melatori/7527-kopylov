@@ -1,8 +1,7 @@
 package ru.ctf.focusstart.kopylov.UIComponents.settings;
 
 import ru.ctf.focusstart.kopylov.UIComponents.Palette;
-import ru.ctf.focusstart.kopylov.logic.FieldBuilder;
-import ru.ctf.focusstart.kopylov.logic.Game;
+import ru.ctf.focusstart.kopylov.logic.game.GameManager;
 
 import javax.swing.*;
 import javax.swing.plaf.BorderUIResource;
@@ -13,8 +12,11 @@ public class UISettings {
     private JTextField heightInput = new JTextField();
     private JTextField widthInput = new JTextField();
     private JTextField bombCountInput = new JTextField();
+    private GameManager gameManager;
 
-    public UISettings() {
+    public UISettings(GameManager gameManager) {
+        this.gameManager = gameManager;
+
         settingsFrame = new JFrame("Settings");
 
         settingsFrame.add(createMainPanel());
@@ -26,7 +28,7 @@ public class UISettings {
     private JPanel createMainPanel() {
         JPanel mainPanel = new JPanel();
         mainPanel.setOpaque(true);
-        mainPanel.setBackground(Palette.getBackgroundColor());
+        mainPanel.setBackground(Palette.BACKGROUND_COLOR);
 
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(createFieldParamsPanel(), BorderLayout.CENTER);
@@ -38,32 +40,32 @@ public class UISettings {
     private JPanel createFieldParamsPanel() {
         JPanel fieldParams = new JPanel();
         fieldParams.setOpaque(true);
-        fieldParams.setBackground(Palette.getBackgroundColor());
+        fieldParams.setBackground(Palette.BACKGROUND_COLOR);
 
         JLabel heightLabel = new JLabel("Высота");
-        heightLabel.setForeground(Palette.getDarkTextColor());
+        heightLabel.setForeground(Palette.DARK_TEXT_COLOR);
         JLabel widthLabel = new JLabel("Ширина");
-        widthLabel.setForeground(Palette.getDarkTextColor());
+        widthLabel.setForeground(Palette.DARK_TEXT_COLOR);
         JLabel bombCountLabel = new JLabel("Количество бомб");
-        bombCountLabel.setForeground(Palette.getDarkTextColor());
+        bombCountLabel.setForeground(Palette.DARK_TEXT_COLOR);
 
-        heightInput.setText(String.valueOf(FieldBuilder.getHeight()));
+        heightInput.setText(String.valueOf(gameManager.getField().getHeight()));
         heightInput.setOpaque(true);
-        heightInput.setBackground(Palette.getInputBackgroundColor());
-        heightInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.getInputBorderColor(), 1));
-        heightInput.setForeground(Palette.getDarkTextColor());
+        heightInput.setBackground(Palette.INPUT_BACKGROUND_COLOR);
+        heightInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.INPUT_BORDER_COLOR, 1));
+        heightInput.setForeground(Palette.DARK_TEXT_COLOR);
 
-        widthInput.setText(String.valueOf(FieldBuilder.getWidth()));
+        widthInput.setText(String.valueOf(gameManager.getField().getWidth()));
         widthInput.setOpaque(true);
-        widthInput.setBackground(Palette.getInputBackgroundColor());
-        widthInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.getInputBorderColor(), 1));
-        widthInput.setForeground(Palette.getDarkTextColor());
+        widthInput.setBackground(Palette.INPUT_BACKGROUND_COLOR);
+        widthInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.INPUT_BORDER_COLOR, 1));
+        widthInput.setForeground(Palette.DARK_TEXT_COLOR);
 
-        bombCountInput.setText(String.valueOf(FieldBuilder.getBombCount()));
+        bombCountInput.setText(String.valueOf(gameManager.getField().getBombCount()));
         bombCountInput.setOpaque(true);
-        bombCountInput.setBackground(Palette.getInputBackgroundColor());
-        bombCountInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.getInputBorderColor(), 1));
-        bombCountInput.setForeground(Palette.getDarkTextColor());
+        bombCountInput.setBackground(Palette.INPUT_BACKGROUND_COLOR);
+        bombCountInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.INPUT_BORDER_COLOR, 1));
+        bombCountInput.setForeground(Palette.DARK_TEXT_COLOR);
 
         fieldParams.add(heightLabel);
         fieldParams.add(heightInput);
@@ -80,20 +82,20 @@ public class UISettings {
     private JPanel createButtonsPanel() {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setOpaque(true);
-        buttonsPanel.setBackground(Palette.getBackgroundColor());
+        buttonsPanel.setBackground(Palette.BACKGROUND_COLOR);
 
         JButton accept = new JButton("Accept");
         accept.setOpaque(true);
-        accept.setBackground(Palette.getButtonBackgroundColor());
+        accept.setBackground(Palette.BUTTON_BACKGROUND_COLOR);
         accept.setBorderPainted(false);
-        accept.setForeground(Palette.getDarkTextColor());
+        accept.setForeground(Palette.DARK_TEXT_COLOR);
 
         accept.addActionListener((args) -> acceptFieldParams(Integer.valueOf(heightInput.getText()), Integer.valueOf(widthInput.getText()), Integer.valueOf(bombCountInput.getText())));
         JButton cancel = new JButton("Cancel");
         cancel.setOpaque(true);
-        cancel.setBackground(Palette.getButtonBackgroundColor());
+        cancel.setBackground(Palette.BUTTON_BACKGROUND_COLOR);
         cancel.setBorderPainted(false);
-        cancel.setForeground(Palette.getDarkTextColor());
+        cancel.setForeground(Palette.DARK_TEXT_COLOR);
 
         cancel.addActionListener((args) -> close());
 
@@ -104,12 +106,25 @@ public class UISettings {
     }
 
     private void acceptFieldParams(int height, int width, int bombCount) {
-        if (FieldBuilder.setField(height, width, bombCount)) {
-            Game.restartGame();
+        if (isCorrectField(height, width, bombCount)) {
+            gameManager.restartGame(height, width, bombCount);
             close();
         } else {
             JOptionPane.showMessageDialog(null, "Incorrect parameters", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private static boolean isCorrectField(int height, int width, int bombCount) {
+        if (height < 3) {
+            return false;
+        }
+        if (width < 3) {
+            return false;
+        }
+        if (bombCount < 1) {
+            return false;
+        }
+        return bombCount < width * height;
     }
 
     public void open() {
