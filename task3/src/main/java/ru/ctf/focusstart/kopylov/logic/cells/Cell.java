@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Cell {
     private List<CellListener> listeners = new ArrayList<>();
-    public boolean IS_MARKED = false;
-    public boolean IS_OPEN = false;
-    private final int content;
+    private boolean isMarked = false;
+    private boolean isOpen = false;
+    private final int CONTENT;
 
     public enum CellAction {
         BOOM,
@@ -25,7 +25,7 @@ public class Cell {
             content = 0;
             System.err.println("В ячейку был подан ошибочный параметр, заменен на пустую ячейку");
         }
-        this.content = content;
+        this.CONTENT = content;
     }
 
     public void addListener(CellListener cell) {
@@ -33,49 +33,49 @@ public class Cell {
     }
 
     public CellAction open() {
-        if (IS_MARKED) {
+        if (isMarked) {
             return CellAction.NOTHING;
         }
-        if (IS_OPEN) {
+        if (isOpen) {
             return CellAction.NOTHING;
         }
-        IS_OPEN = true;
+        isOpen = true;
         for (CellListener cell : listeners) {
-            cell.open(content);
+            cell.open(CONTENT);
         }
-        if (content == -1) {
+        if (CONTENT == -1) {
             return CellAction.BOOM;
         }
-        if (content == 0) {
+        if (CONTENT == 0) {
             return CellAction.EMPTY_CELL_OPEN;
         }
         return CellAction.CELL_OPEN;
     }
 
     public CellAction mark() {
-        if (IS_OPEN) {
+        if (isOpen) {
             return CellAction.NOTHING;
         }
-        if (!IS_MARKED) {
-            IS_MARKED = true;
+        if (!isMarked) {
+            isMarked = true;
             for (CellListener cell : listeners) {
                 cell.mark();
             }
-            if (content == -1) {
+            if (CONTENT == -1) {
                 return CellAction.BOMB_MARKED;
             }
-            if (content == 0 || (content > 0 && content < 9)) {
+            if (CONTENT == 0 || (CONTENT > 0 && CONTENT < 9)) {
                 return CellAction.CELL_MARKED;
             }
         } else {
-            IS_MARKED = false;
+            isMarked = false;
             for (CellListener cell : listeners) {
                 cell.unmark();
             }
-            if (content == -1) {
+            if (CONTENT == -1) {
                 return CellAction.BOMB_UNMARKED;
             }
-            if (content == 0 || (content > 0 && content < 9)) {
+            if (CONTENT == 0 || (CONTENT > 0 && CONTENT < 9)) {
                 return CellAction.CELL_UNMARKED;
             }
         }

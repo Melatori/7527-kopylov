@@ -45,7 +45,7 @@ public class Field {
                 gameManager.getScore().calculateScore(gameManager.STOPWATCH.getTimeSec());
                 break;
             case EMPTY_CELL_OPEN:
-                openNearCells(x, y);
+                openNearCells(x, y, true);
                 break;
             case BOOM:
                 gameManager.handleLose();
@@ -91,35 +91,42 @@ public class Field {
         this.bombCount = bombCount;
     }
 
-    private void openNearCells(int x, int y) {
-        if (cells[x][y].open() == Cell.CellAction.CELL_OPEN) {
-            gameManager.getScore().calculateScore(gameManager.STOPWATCH.getTimeSec());
-            return;
+    private void openNearCells(int x, int y, boolean isStartOpening) {
+        if (!isStartOpening) {
+            Cell.CellAction cellAction = cells[x][y].open();
+            if (cellAction == Cell.CellAction.CELL_OPEN) {
+                gameManager.getScore().calculateScore(gameManager.STOPWATCH.getTimeSec());
+                return;
+            }
+
+            if (cellAction != Cell.CellAction.EMPTY_CELL_OPEN) {
+                return;
+            }
         }
 
         if (isCoordinatesAvailable(x - 1, y - 1)) {
-            openNearCells(x - 1, y - 1);
+            openNearCells(x - 1, y - 1, false);
         }
         if (isCoordinatesAvailable(x - 1, y)) {
-            openNearCells(x - 1, y);
+            openNearCells(x - 1, y, false);
         }
         if (isCoordinatesAvailable(x - 1, y + 1)) {
-            openNearCells(x - 1, y + 1);
+            openNearCells(x - 1, y + 1, false);
         }
         if (isCoordinatesAvailable(x, y - 1)) {
-            openNearCells(x, y - 1);
+            openNearCells(x, y - 1, false);
         }
         if (isCoordinatesAvailable(x, y + 1)) {
-            openNearCells(x, y + 1);
+            openNearCells(x, y + 1, false);
         }
         if (isCoordinatesAvailable(x + 1, y - 1)) {
-            openNearCells(x + 1, y - 1);
+            openNearCells(x + 1, y - 1, false);
         }
         if (isCoordinatesAvailable(x + 1, y)) {
-            openNearCells(x + 1, y);
+            openNearCells(x + 1, y, false);
         }
         if (isCoordinatesAvailable(x + 1, y + 1)) {
-            openNearCells(x + 1, y + 1);
+            openNearCells(x + 1, y + 1, false);
         }
     }
 
@@ -128,7 +135,7 @@ public class Field {
     }
 
     private boolean isCoordinatesAvailable(int x, int y) {
-        return (x > -1 && x < height && y > -1 && y < width && !cells[x][y].IS_OPEN && !cells[x][y].IS_MARKED);
+        return (x > -1 && x < height && y > -1 && y < width);
     }
 
     public Cell[][] getCells() {
