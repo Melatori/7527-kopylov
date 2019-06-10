@@ -49,19 +49,19 @@ public class UISettings {
         JLabel bombCountLabel = new JLabel("Количество бомб");
         bombCountLabel.setForeground(Palette.DARK_TEXT_COLOR);
 
-        heightInput.setText(String.valueOf(gameManager.getField().getHeight()));
+        heightInput.setText(String.valueOf(gameManager.getFieldHeight()));
         heightInput.setOpaque(true);
         heightInput.setBackground(Palette.INPUT_BACKGROUND_COLOR);
         heightInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.INPUT_BORDER_COLOR, 1));
         heightInput.setForeground(Palette.DARK_TEXT_COLOR);
 
-        widthInput.setText(String.valueOf(gameManager.getField().getWidth()));
+        widthInput.setText(String.valueOf(gameManager.getFieldWidth()));
         widthInput.setOpaque(true);
         widthInput.setBackground(Palette.INPUT_BACKGROUND_COLOR);
         widthInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.INPUT_BORDER_COLOR, 1));
         widthInput.setForeground(Palette.DARK_TEXT_COLOR);
 
-        bombCountInput.setText(String.valueOf(gameManager.getField().getBombCount()));
+        bombCountInput.setText(String.valueOf(gameManager.getFieldBombCount()));
         bombCountInput.setOpaque(true);
         bombCountInput.setBackground(Palette.INPUT_BACKGROUND_COLOR);
         bombCountInput.setBorder(new BorderUIResource.LineBorderUIResource(Palette.INPUT_BORDER_COLOR, 1));

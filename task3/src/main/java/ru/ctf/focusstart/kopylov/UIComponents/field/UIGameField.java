@@ -2,16 +2,16 @@ package ru.ctf.focusstart.kopylov.UIComponents.field;
 
 import ru.ctf.focusstart.kopylov.UIComponents.Palette;
 import ru.ctf.focusstart.kopylov.logic.field.Field;
-import ru.ctf.focusstart.kopylov.logic.field.FieldListener;
 import ru.ctf.focusstart.kopylov.logic.game.GameManager;
 import ru.ctf.focusstart.kopylov.logic.cells.Cell;
+import ru.ctf.focusstart.kopylov.logic.game.GameStartListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class UIGameField implements FieldListener {
+public class UIGameField implements GameStartListener {
     private JPanel fieldPanel;
     private Field fieldModel;
 
@@ -21,14 +21,14 @@ public class UIGameField implements FieldListener {
         fieldPanel.setBackground(Palette.BACKGROUND_COLOR);
 
         fieldModel = gameManager.getField();
-        fieldModel.addListener(this);
+        gameManager.addGameStartListener(this);
 
         UICell[][] uiCells = buildField();
         initializeField(uiCells);
     }
 
     @Override
-    public void createNewGame() {
+    public void handleNewGameEvent() {
         UICell[][] uiCells = buildField();
         initializeField(uiCells);
     }

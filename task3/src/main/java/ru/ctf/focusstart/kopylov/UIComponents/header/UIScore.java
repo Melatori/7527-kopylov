@@ -19,7 +19,7 @@ class UIScore implements ScoreListener {
     }
 
     @Override
-    public void changeScore(int score) {
+    public void handleChangeScoreEvent(int score) {
         this.score.setText(String.format("%4d", score));
     }
 

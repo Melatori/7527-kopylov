@@ -20,8 +20,8 @@ public class UIMainWindow implements GameRestartListener {
     }
 
     @Override
-    public void handleRestartGame() {
-        mainFrame.setMinimumSize(new Dimension(gameManager.getField().getWidth() * 40,gameManager.getField().getHeight() * 40 + 40));
+    public void handleRestartGameEvent() {
+        mainFrame.setMinimumSize(new Dimension(gameManager.getFieldWidth() * 40,gameManager.getFieldHeight() * 40 + 40));
         mainFrame.getContentPane().validate();
         mainFrame.getContentPane().repaint();
     }

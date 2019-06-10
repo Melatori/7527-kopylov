@@ -19,7 +19,7 @@ public class UIGameTimer implements StopwatchListener {
     }
 
     @Override
-    public void setTime(int time) {
+    public void handleTimeChangedEvent(int time) {
         timer.setText(String.format("%03d : %02d", getMin(time), getSec(time)));
     }
 

@@ -11,7 +11,7 @@ public class Stopwatch {
 
     private Timer timer = new Timer(1000, e -> {
         for (StopwatchListener listener : listeners) {
-            listener.setTime(++timeSec);
+            listener.handleTimeChangedEvent(++timeSec);
         }
     });
 
@@ -37,7 +37,7 @@ public class Stopwatch {
         timer.stop();
         timeSec = 0;
         for (StopwatchListener listener : listeners) {
-            listener.setTime(timeSec);
+            listener.handleTimeChangedEvent(timeSec);
         }
     }
 

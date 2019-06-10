@@ -34,7 +34,7 @@ public class Score {
         score += difficulty * multiplier;
 
         for (ScoreListener listener : listeners) {
-            listener.changeScore((int) Math.floor(score));
+            listener.handleChangeScoreEvent((int) Math.floor(score));
         }
     }
 

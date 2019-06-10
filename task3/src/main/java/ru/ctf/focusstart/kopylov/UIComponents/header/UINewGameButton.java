@@ -1,14 +1,14 @@
 package ru.ctf.focusstart.kopylov.UIComponents.header;
 
 import ru.ctf.focusstart.kopylov.UIComponents.Palette;
-import ru.ctf.focusstart.kopylov.logic.field.FieldListener;
 import ru.ctf.focusstart.kopylov.logic.game.GameManager;
+import ru.ctf.focusstart.kopylov.logic.game.GameStartListener;
 import ru.ctf.focusstart.kopylov.logic.game.GameStateListener;
 
 import javax.swing.*;
 import java.awt.*;
 
-class UINewGameButton implements GameStateListener, FieldListener {
+class UINewGameButton implements GameStateListener, GameStartListener {
     private JButton button = new JButton();
 
     UINewGameButton(GameManager gameManager) {
@@ -24,7 +24,7 @@ class UINewGameButton implements GameStateListener, FieldListener {
         button.addActionListener((e) -> gameManager.restartGame());
 
         gameManager.addGameStateListener(this);
-        gameManager.getField().addListener(this);
+        gameManager.addGameStartListener(this);
     }
 
     JButton getButton() {
@@ -32,17 +32,17 @@ class UINewGameButton implements GameStateListener, FieldListener {
     }
 
     @Override
-    public void handleWinGame() {
+    public void handleWinGameEvent() {
         button.setBackground(Palette.WIN_BUTTON_COLOR);
     }
 
     @Override
-    public void handleLoseGame() {
+    public void handleLoseGameEvent() {
         button.setBackground(Palette.LOSE_BUTTON_COLOR);
     }
 
     @Override
-    public void createNewGame() {
+    public void handleNewGameEvent() {
         button.setBackground(Palette.HEADER_BACKGROUND_COLOR);
     }
 }

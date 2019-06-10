@@ -7,7 +7,7 @@ public class Cell {
     private List<CellListener> listeners = new ArrayList<>();
     private boolean isMarked = false;
     private boolean isOpen = false;
-    private final int CONTENT;
+    private final int content;
 
     public enum CellAction {
         BOOM,
@@ -25,7 +25,7 @@ public class Cell {
             content = 0;
             System.err.println("В ячейку был подан ошибочный параметр, заменен на пустую ячейку");
         }
-        this.CONTENT = content;
+        this.content = content;
     }
 
     public void addListener(CellListener cell) {
@@ -41,12 +41,12 @@ public class Cell {
         }
         isOpen = true;
         for (CellListener cell : listeners) {
-            cell.open(CONTENT);
+            cell.handleOpenCellEvent(content);
         }
-        if (CONTENT == -1) {
+        if (content == -1) {
             return CellAction.BOOM;
         }
-        if (CONTENT == 0) {
+        if (content == 0) {
             return CellAction.EMPTY_CELL_OPEN;
         }
         return CellAction.CELL_OPEN;
@@ -59,23 +59,23 @@ public class Cell {
         if (!isMarked) {
             isMarked = true;
             for (CellListener cell : listeners) {
-                cell.mark();
+                cell.handleMarkCellEvent();
             }
-            if (CONTENT == -1) {
+            if (content == -1) {
                 return CellAction.BOMB_MARKED;
             }
-            if (CONTENT == 0 || (CONTENT > 0 && CONTENT < 9)) {
+            if (content == 0 || (content > 0 && content < 9)) {
                 return CellAction.CELL_MARKED;
             }
         } else {
             isMarked = false;
-            for (CellListener cell : listeners) {
-                cell.unmark();
+            for (CellListener listener : listeners) {
+                listener.handleUnmarkCellEvent();
             }
-            if (CONTENT == -1) {
+            if (content == -1) {
                 return CellAction.BOMB_UNMARKED;
             }
-            if (CONTENT == 0 || (CONTENT > 0 && CONTENT < 9)) {
+            if (content == 0 || (content > 0 && content < 9)) {
                 return CellAction.CELL_UNMARKED;
             }
         }

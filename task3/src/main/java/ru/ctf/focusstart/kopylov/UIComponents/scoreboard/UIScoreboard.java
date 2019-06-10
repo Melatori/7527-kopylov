@@ -31,7 +31,7 @@ public class UIScoreboard {
         leaderboard.setBorder(new BorderUIResource.EmptyBorderUIResource(8,16,8,16));
 
         List<Integer> scoreList = new ArrayList<>();
-        for (Double score : gameManager.getScoreboard().getScoreList()) {
+        for (Double score : gameManager.getScoreboardList()) {
             scoreList.add(score.intValue());
         }
         scoreList.sort(Comparator.comparingInt(Integer::intValue).reversed());

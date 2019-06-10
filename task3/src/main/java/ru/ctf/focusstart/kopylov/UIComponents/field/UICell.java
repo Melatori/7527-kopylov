@@ -19,7 +19,7 @@ public class UICell implements CellListener {
         button.setContentAreaFilled(false);
     }
 
-    public void open(int number) {
+    public void handleOpenCellEvent(int number) {
         button.setOpaque(true);
         if (number == -1) {
             button.setIcon(BOMB_ICON);
@@ -33,11 +33,11 @@ public class UICell implements CellListener {
         button.setBorder(new BorderUIResource.LineBorderUIResource(Palette.CELL_BORDER_COLOR));
     }
 
-    public void mark() {
+    public void handleMarkCellEvent() {
         button.setIcon(FLAG_ICON);
     }
 
-    public void unmark() {
+    public void handleUnmarkCellEvent() {
         button.setIcon(null);
     }
 

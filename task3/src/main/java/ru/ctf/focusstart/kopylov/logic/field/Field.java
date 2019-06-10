@@ -3,9 +3,6 @@ package ru.ctf.focusstart.kopylov.logic.field;
 import ru.ctf.focusstart.kopylov.logic.cells.Cell;
 import ru.ctf.focusstart.kopylov.logic.game.GameManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Field {
     private int height = 10;
     private int width = 10;
@@ -13,7 +10,6 @@ public class Field {
     private Cell[][] cells;
     private int bombMarked;
     private int emptyCellsMarked;
-    private List<FieldListener> fieldListeners = new ArrayList<>();
     private GameManager gameManager;
 
     public Field(GameManager gameManager) {
@@ -21,28 +17,18 @@ public class Field {
         cells = FieldBuilder.buildField(height, width, bombCount);
     }
 
-    public void changeField() {
+    public void resetField() {
         bombMarked = 0;
         emptyCellsMarked = 0;
         cells = FieldBuilder.buildField(height, width, bombCount);
     }
 
-    public void start() {
-        for (FieldListener listener : fieldListeners) {
-            listener.createNewGame();
-        }
-    }
-
-    public void addListener(FieldListener listener) {
-        fieldListeners.add(listener);
-    }
-
     public void openCell(int x, int y) {
-        gameManager.STOPWATCH.start();
+        gameManager.stopwatch.start();
         Cell.CellAction action = cells[x][y].open();
         switch (action) {
             case CELL_OPEN:
-                gameManager.getScore().calculateScore(gameManager.STOPWATCH.getTimeSec());
+                gameManager.updateScore(gameManager.stopwatch.getTimeSec());
                 break;
             case EMPTY_CELL_OPEN:
                 openNearCells(x, y, true);
@@ -54,7 +40,7 @@ public class Field {
     }
 
     public void markCell(int x, int y) {
-        gameManager.STOPWATCH.start();
+        gameManager.stopwatch.start();
         Cell.CellAction action = cells[x][y].mark();
         switch (action) {
             case CELL_MARKED:
@@ -79,7 +65,7 @@ public class Field {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (cells[i][j].open() == Cell.CellAction.CELL_OPEN) {
-                    gameManager.getScore().calculateScore(gameManager.STOPWATCH.getTimeSec());
+                    gameManager.updateScore(gameManager.stopwatch.getTimeSec());
                 }
             }
         }
@@ -95,7 +81,7 @@ public class Field {
         if (!isStartOpening) {
             Cell.CellAction cellAction = cells[x][y].open();
             if (cellAction == Cell.CellAction.CELL_OPEN) {
-                gameManager.getScore().calculateScore(gameManager.STOPWATCH.getTimeSec());
+                gameManager.updateScore(gameManager.stopwatch.getTimeSec());
                 return;
             }
 
