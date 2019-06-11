@@ -14,7 +14,7 @@ public class UIHeader {
         UIScore score = new UIScore();
         UINewGameButton newGame = new UINewGameButton(gameManager);
 
-        gameManager.stopwatch.addListeners(timer);
+        gameManager.addStopwatchListener(timer);
         gameManager.addScoreListener(score);
 
         head.setBackground(Palette.HEADER_COLOR);

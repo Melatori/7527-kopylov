@@ -24,11 +24,11 @@ public class Field {
     }
 
     public void openCell(int x, int y) {
-        gameManager.stopwatch.start();
+        gameManager.startStopwatch();
         Cell.CellAction action = cells[x][y].open();
         switch (action) {
             case CELL_OPEN:
-                gameManager.updateScore(gameManager.stopwatch.getTimeSec());
+                gameManager.updateScore();
                 break;
             case EMPTY_CELL_OPEN:
                 openNearCells(x, y, true);
@@ -40,7 +40,7 @@ public class Field {
     }
 
     public void markCell(int x, int y) {
-        gameManager.stopwatch.start();
+        gameManager.startStopwatch();
         Cell.CellAction action = cells[x][y].mark();
         switch (action) {
             case CELL_MARKED:
@@ -65,7 +65,7 @@ public class Field {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (cells[i][j].open() == Cell.CellAction.CELL_OPEN) {
-                    gameManager.updateScore(gameManager.stopwatch.getTimeSec());
+                    gameManager.updateScore();
                 }
             }
         }
@@ -81,7 +81,7 @@ public class Field {
         if (!isStartOpening) {
             Cell.CellAction cellAction = cells[x][y].open();
             if (cellAction == Cell.CellAction.CELL_OPEN) {
-                gameManager.updateScore(gameManager.stopwatch.getTimeSec());
+                gameManager.updateScore();
                 return;
             }
 

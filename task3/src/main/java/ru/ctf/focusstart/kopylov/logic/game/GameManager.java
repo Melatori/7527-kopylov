@@ -5,6 +5,7 @@ import ru.ctf.focusstart.kopylov.logic.field.Field;
 import ru.ctf.focusstart.kopylov.logic.score.Score;
 import ru.ctf.focusstart.kopylov.logic.score.ScoreListener;
 import ru.ctf.focusstart.kopylov.logic.stopwatch.Stopwatch;
+import ru.ctf.focusstart.kopylov.logic.stopwatch.StopwatchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class GameManager {
     private Field field = new Field(this);
     private Score score = new Score(field);
     private Scoreboard scoreboard = new Scoreboard();
-    public final Stopwatch stopwatch = new Stopwatch();
+    private final Stopwatch stopwatch = new Stopwatch();
 
 
     public void addGameStateListener(GameStateListener listener) {
@@ -77,6 +78,9 @@ public class GameManager {
         }
     }
 
+    public void startStopwatch() {
+        stopwatch.stop();
+    }
     public Field getField() {
         return field;
     }
@@ -97,8 +101,12 @@ public class GameManager {
         score.addListeners(listener);
     }
 
-    public void updateScore(int time) {
-        score.calculateScore(time);
+    public void addStopwatchListener(StopwatchListener listener) {
+        stopwatch.addListeners(listener);
+    }
+
+    public void updateScore() {
+        score.calculateScore(stopwatch.getTimeSec());
     }
 
     public List<Double> getScoreboardList() {
