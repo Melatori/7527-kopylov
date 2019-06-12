@@ -17,6 +17,7 @@ public class Producer implements Runnable {
             try {
                 Thread.sleep(periodMs);
                 SomeData data = new SomeData();
+                System.out.println(Thread.currentThread().getName() + ": Data \"" + data.number + "\" was created");
                 try {
                     queue.add(data);
                     System.out.println(Thread.currentThread().getName() + ": Added data \"" + data.number + "\" to queue");

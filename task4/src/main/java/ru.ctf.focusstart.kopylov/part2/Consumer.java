@@ -6,6 +6,7 @@ public class Consumer implements Runnable {
     private ArrayBlockingQueue<SomeData> queue;
     private long periodMs = 150;
     private boolean isWorking = true;
+    private long processingMs = 20;
 
     Consumer(ArrayBlockingQueue<SomeData> queue) {
         this.queue = queue;
@@ -17,7 +18,9 @@ public class Consumer implements Runnable {
             try {
                 Thread.sleep(periodMs);
                 SomeData data = queue.take();
-                System.out.println(Thread.currentThread().getName() + " Data \"" + data.number + "\" was consumed");
+                System.out.println(Thread.currentThread().getName() + ": Data \"" + data.number + "\" was taken from queue");
+                Thread.sleep(processingMs);
+                System.out.println(Thread.currentThread().getName() + ": Data \"" + data.number + "\" was consumed");
             } catch (InterruptedException ignore) {
                 isWorking = false;
             }
