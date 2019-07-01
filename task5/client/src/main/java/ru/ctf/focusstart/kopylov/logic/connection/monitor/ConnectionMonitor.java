@@ -11,7 +11,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ConnectionMonitor implements ReceiverSystemMessageListener {
     private volatile AtomicInteger disconnectTimer = new AtomicInteger(0);
     private List<ConnectionBrokenListener> listeners = new ArrayList<>();
-    private Thread monitor;
+
+    private volatile boolean interrupted = false;
 
     public ConnectionMonitor() {
     }
@@ -27,16 +28,17 @@ public class ConnectionMonitor implements ReceiverSystemMessageListener {
     }
 
     public void startMonitorServerConnection() {
-        monitor = new Thread(this::monitoring);
+        Thread monitor = new Thread(this::monitoring);
+        interrupted = false;
         monitor.start();
     }
 
     public void stopMonitorServerConnection() {
-        monitor.interrupt();
+        interrupted = true;
     }
 
     private void monitoring() {
-        while (true) {
+        while (!interrupted) {
             if (isDisconnected()) {
                 for (ConnectionBrokenListener listener : listeners) {
                     listener.handleConnectionBrokenEvent();

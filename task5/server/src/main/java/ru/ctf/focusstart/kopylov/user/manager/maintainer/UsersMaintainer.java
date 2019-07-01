@@ -35,7 +35,7 @@ public class UsersMaintainer {
         users.add(user);
     }
 
-    public void removeUser(User user) {
+    public void disconnectUser(User user) {
         users.remove(user);
     }
 }

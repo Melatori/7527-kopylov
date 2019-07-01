@@ -54,6 +54,7 @@ public class User implements ReceiverUsernameMessageListener {
     @Override
     public void handleUnableUsernameMessageEvent() {
         connector.closeConnection();
+        name = null;
         notifyAuthorizationFailed();
         for (UserListener listener : listeners) {
             listener.handleUsernameOccupiedEvent();

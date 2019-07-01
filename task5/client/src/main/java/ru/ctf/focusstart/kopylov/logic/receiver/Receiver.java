@@ -16,8 +16,9 @@ public class Receiver {
     private List<ReceiverSystemMessageListener> systemMessageListeners = new ArrayList<>();
     private List<ReceiverUsernameMessageListener> usernameMessageListeners = new ArrayList<>();
     private List<ConnectionBrokenListener> connectionBrokenListeners = new ArrayList<>();
-    private Thread receive;
     private BufferedReader reader;
+
+    private volatile boolean interrupted = false;
 
     public Receiver() {
     }
@@ -27,40 +28,44 @@ public class Receiver {
     }
 
     public void startReceiveMessages() {
-        receive = new Thread(this::receiveMessage);
+        Thread receive = new Thread(this::receiveMessage);
+        interrupted = false;
         receive.start();
     }
 
     public void stopReceiveMessage() {
-        receive.interrupt();
+        interrupted = true;
     }
 
     private void receiveMessage() {
-        while (true) {
+        ObjectMapper mapper = new ObjectMapper();
+        while (!interrupted) {
             try {
-                if (reader.ready()) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Message message = mapper.readValue(reader.readLine(), Message.class);
+                Message message = mapper.readValue(reader.readLine(), Message.class);
 
-                    if (!message.getMessage().equals("Ping"))
-                        System.out.println("Get message: " + message.toString());
+                if (!message.getMessage().equals("Ping"))
+                    System.out.println("Get message: " + message.toString());
 
-                    if (message.getType().equals("Auth")) {
-                        notifyUsernameListeners(message);
-                    } else if (isConnectionSystemMessage(message)) {
-                        notifySystemListeners(message);
-                    } else if (message.getType().equals("System")) {
-                        notifySetUsersListListener(parseForUsers(message.getMessage()));
-                    } else {
-                        if (message.getAuthor().equals("Server")) {
-                            addOrRemoveFromUsersOnline(message.getMessage());
-                        }
-                        notifyListeners(message);
+                if (message.getType().equals("Auth")) {
+                    notifyUsernameListeners(message);
+                } else if (isConnectionSystemMessage(message)) {
+                    notifySystemListeners(message);
+                } else if (message.getType().equals("System")) {
+                    notifySetUsersListListener(parseForUsers(message.getMessage()));
+                } else {
+                    if (message.getAuthor().equals("Server")) {
+                        addOrRemoveFromUsersOnline(message.getMessage());
                     }
+                    notifyListeners(message);
                 }
             } catch (IOException ignored) {
                 System.err.println("Can't read a message. Connection problem");
                 notifyConnectionBrokenListeners();
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {
             }
         }
     }

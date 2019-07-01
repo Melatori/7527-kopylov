@@ -14,6 +14,8 @@ public class Receiver {
     private BufferedReader reader;
     private String username;
 
+    private volatile boolean interrupted = false;
+
     private List<ReceiverMessageListener> messageListeners = new ArrayList<>();
     private List<ReceiverSystemMessageListener> systemMessageListeners = new ArrayList<>();
     private List<ReceiverAuthMessageListener> authMessageListeners = new ArrayList<>();
@@ -25,11 +27,13 @@ public class Receiver {
     }
 
     public void startReceiveMessages() {
+        interrupted = false;
         receive.start();
     }
 
     public void stopReceiveMessages() {
-        receive.interrupt();
+        interrupted = true;
+        System.out.println(receive.isInterrupted());
     }
 
     public void addMessageListener(ReceiverMessageListener listener) {
@@ -49,30 +53,32 @@ public class Receiver {
     }
 
     private void receiveMessage() {
-        while (true) {
+        ObjectMapper mapper = new ObjectMapper();
+        while (!interrupted) {
             try {
-                if (reader.ready()) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    Message message = mapper.readValue(reader.readLine(), Message.class);
+                Message message = mapper.readValue(reader.readLine(), Message.class);
 
-                    if (username != null) {
-                        message.setAuthor(username);
-                    }
-
-                    if (!message.getType().equals("System"))
-                        System.out.println("Get message: " + message.toString());
-
-                    if (message.getType().equals("Auth")) {
-                        notifyAuthMessage(message);
-                    } else if (message.getType().equals("System")) {
-                        notifySystemMessage(message);
-                    } else {
-                        notifyMessage(message);
-                    }
+                if (username != null) {
+                    message.setAuthor(username);
                 }
-            } catch (IOException e) {
+
+                if (!message.getType().equals("System"))
+                    System.out.println("Get message: " + message.toString());
+
+                if (message.getType().equals("Auth")) {
+                    notifyAuthMessage(message);
+                } else if (message.getType().equals("System")) {
+                    notifySystemMessage(message);
+                } else {
+                    notifyMessage(message);
+                }
+            } catch (NullPointerException | IOException e) {
                 System.err.println("Can't read a message. Connection problem");
                 notifyConnectionBroken();
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {
             }
         }
     }

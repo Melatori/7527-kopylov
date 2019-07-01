@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class UsersManager implements MonitorFoundDeadUserListener, UserLoginListener, ReceiverMessageListener {
+    private final Object lock = new Object();
+
     private volatile LinkedBlockingQueue<User> users = new LinkedBlockingQueue<>();
     private UsersMonitor usersMonitor = new UsersMonitor();
     private UsersMaintainer usersMaintainer = new UsersMaintainer();
@@ -32,7 +34,7 @@ public class UsersManager implements MonitorFoundDeadUserListener, UserLoginList
         for (User user : users) {
             user.sendServerCloseMessage();
             usersMonitor.disconnectUser(user);
-            usersMaintainer.removeUser(user);
+            usersMaintainer.disconnectUser(user);
             user.disconnect();
         }
         users.clear();
@@ -48,13 +50,18 @@ public class UsersManager implements MonitorFoundDeadUserListener, UserLoginList
 
     @Override
     public void handleFoundDeadUser(User user) {
-        users.remove(user);
-        usersMaintainer.removeUser(user);
-        usersMonitor.disconnectUser(user);
-        user.disconnect();
+        synchronized (lock) {
+            System.out.println("in synchronized block");
+            if (users.contains(user)) {
+                users.remove(user);
+                usersMaintainer.disconnectUser(user);
+                usersMonitor.disconnectUser(user);
+                user.disconnect();
 
-        Message message = new Message("Server", "User \"" + user.getUsername() + "\" has disconnected", "Message");
-        sendMessageToAllUsers(message);
+                Message message = new Message("Server", "User \"" + user.getUsername() + "\" has disconnected", "Message");
+                sendMessageToAllUsers(message);
+            }
+        }
     }
 
     @Override

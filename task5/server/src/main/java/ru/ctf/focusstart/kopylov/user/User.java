@@ -74,6 +74,7 @@ public class User implements ConnectionBrokenListener, ReceiverSystemMessageList
     public void usernameWasOccupied() {
         Message message = new Message("Server", "User already exists", "Auth");
         sender.sendMessage(message);
+        disconnect();
     }
 
     public void usernameSet() {

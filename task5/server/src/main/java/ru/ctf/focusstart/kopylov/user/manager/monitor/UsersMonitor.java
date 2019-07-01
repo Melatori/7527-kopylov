@@ -13,10 +13,11 @@ public class UsersMonitor implements UserDisconnectedListener {
     private List<MonitorFoundDeadUserListener> listeners = new ArrayList<>();
 
     private Thread monitor;
+    private volatile boolean interrupted = false;
 
     public UsersMonitor() {
         monitor = new Thread(() -> {
-            while (true) {
+            while (!interrupted) {
                 for (User user : users) {
                     if (user.isDisconnected()) {
                         handleUserDisconnectedEvent(user);
@@ -40,11 +41,12 @@ public class UsersMonitor implements UserDisconnectedListener {
     }
 
     public void startMonitor() {
+        interrupted = false;
         monitor.start();
     }
 
     public void stopMonitor() {
-        monitor.interrupt();
+        interrupted = true;
     }
 
     public void addFoundDeadUserListener(MonitorFoundDeadUserListener listener) {
